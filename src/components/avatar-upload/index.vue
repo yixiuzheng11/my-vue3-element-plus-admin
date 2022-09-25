@@ -51,9 +51,10 @@
 <script>
 import { ElMessage } from "element-plus";
 import { uploadFile } from "@/api/app";
-import { useStore } from "vuex";
 import { reactive, toRefs, computed, watch } from "vue";
 import _ from "lodash";
+import { useUserStore } from '@/store/modules/user.js';
+
 export default {
   name: "AvatarUpload",
   props: {
@@ -92,7 +93,7 @@ export default {
     });
 
     const token = computed(() => {
-      return useStore().getters.token;
+      return useUserStore().token;
     });
 
     const style = computed(() => {

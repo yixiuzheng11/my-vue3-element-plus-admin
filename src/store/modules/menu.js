@@ -3,7 +3,7 @@ import { deepTree, revisePath, getViewPath } from '@/utils';
 import { ElMessage } from 'element-plus';
 import storage from '@/utils/storage';
 import { defineStore } from 'pinia';
-import { isNull } from '@/utils'
+import { isNull } from '@/utils';
 
 export const useMenuStore = defineStore('menuStore', {
     namespaced: true,
@@ -20,8 +20,7 @@ export const useMenuStore = defineStore('menuStore', {
             return new Promise((resolve, reject) => {
                 getPermMenu()
                     .then((result) => {
-                        const menus = result.data;
-                        console.log(menus);
+                        const { menus } = result.data;
                         const routes = menus
                             .filter((e) => e.type !== 2)
                             .map((e) => {

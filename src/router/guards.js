@@ -1,6 +1,7 @@
 import NProgress from 'nprogress';
 import { checkToken } from '@/utils/auth';
-import { useStore } from '@/store';
+import { useUserStore } from '@/store/modules/user.js';
+import { useProcessStore } from '@/store/modules/process.js';
 
 NProgress.configure({ showSpinner: false });
 
@@ -29,11 +30,19 @@ export function loadGuards(router) {
 
                 const hasRoute = router.hasRoute(to.name);
                 if (hasRoute) {
-                    const store = useStore();
-                    if (!store.getters.userInfo) {
-                        await store.dispatch('user/queryUserInfo');
+                    const userStore = useUserStore();
+                    const processStore = useProcessStore();
+                    if (!userStore.userInfo) {
+                        //await store.dispatch('user/queryUserInfo');
+                        await userStore.queryUserInfo();
                     }
-                    await store.commit('process/ADD_PROCESS', {
+                    /*await store.commit('process/ADD_PROCESS', {
+                        keepAlive: to.meta.keepAlive,
+                        label: to.meta.title,
+                        value: to.fullPath,
+                        name: to.name
+                    })*/
+                    await processStore.ADD_PROCESS({
                         keepAlive: to.meta.keepAlive,
                         label: to.meta.title,
                         value: to.fullPath,

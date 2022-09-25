@@ -29,19 +29,19 @@
 </template>
 
 <script>
-import {useStore} from 'vuex';
 import {computed} from 'vue';
 import {useRouter} from 'vue-router';
 import RouteNav from './route-nav';
+import { useUserStore } from '@/store/modules/user.js';
 
 export default {
   components: {RouteNav},
   setup() {
-    const store = useStore();
+    const userStore = useUserStore();
     const router = useRouter();
 
     const userInfo = computed(() => {
-      let userInfo = store.getters.userInfo
+      let userInfo = userStore.userInfo;
       return {
         ...userInfo,
         headImgUrl:`${process.env.VUE_APP_BASE_API}/${userInfo.headImgUrl}`
@@ -49,11 +49,12 @@ export default {
     });
 
     const menuCollapse = computed(() => {
-      return store.getters.menuCollapse;
+      return userStore.menuCollapse;
     });
 
     const collapse = () => {
-      store.commit('menu/COLLAPSE', !menuCollapse.value);
+      //store.commit('menu/COLLAPSE', !menuCollapse.value);
+      menuStore.COLLAPSE(!menuCollapse.value);
     };
 
     const onCommand = (name) => {
@@ -62,7 +63,13 @@ export default {
           router.push('/my/info');
           break;
         case 'logout':
-          store.dispatch('user/logout').then(() => {
+          /*store.dispatch('user/logout').then(() => {
+            router.push({
+              path: '/login',
+              replace: true,
+            });
+          });*/
+          userStore.logout().then(() => {
             router.push({
               path: '/login',
               replace: true,

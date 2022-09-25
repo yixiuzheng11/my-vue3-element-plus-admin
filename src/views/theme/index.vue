@@ -32,14 +32,20 @@
 
 <script>
 import ThemePicker from "@/components/theme-picker";
-import { useStore } from "vuex";
+import { useAppStore } from '@/store/modules/app.js';
+
+
 export default {
   name: "theme",
   components: { ThemePicker },
   setup() {
-    const store = useStore();
+    const appStore = useAppStore();
     const themeChange = (val) => {
-      store.dispatch("settings/changeSetting", {
+      /*store.dispatch("settings/changeSetting", {
+        key: "theme",
+        value: val,
+      });*/
+      appStore.changeSetting({
         key: "theme",
         value: val,
       });

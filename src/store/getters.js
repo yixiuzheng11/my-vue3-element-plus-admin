@@ -1,4 +1,5 @@
-import { toRaw } from 'vue'
+import { toRaw } from 'vue';
+
 export default {
     // 用户token
     token: (state) => state.user.token,

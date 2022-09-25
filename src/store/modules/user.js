@@ -1,56 +1,57 @@
-import { login, getUserInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
-import storage from '@/utils/storage'
+import { login, getUserInfo } from '@/api/user';
+import { getToken, setToken, removeToken } from '@/utils/auth';
+import storage from '@/utils/storage';
+import { useMenuStore } from '@/store/modules/menu.js';
+import { useProcessStore } from '@/store/modules/process.js';
+import { defineStore } from 'pinia';
 
-const state = () => ({
-    token: getToken() || null,
-    userInfo: storage.get('userInfo') || {},
-})
 
-const mutations = {
-    SET_TOKEN(state, token) {
-        setToken(token)
-        state.token = token
-    },
-    SET_USERINFO(state, userInfo) {
-        storage.set('userInfo', userInfo)
-        state.userInfo = userInfo
-    },
-    CLEAR_USER(state) {
-        state.userInfo = {}
-        storage.remove('userInfo')
-    },
-    CLEAR_TOKEN(state) {
-        state.token = null
-        removeToken()
-    },
-}
-
-const actions = {
-    async login({ commit }, form) {
-        return login(form).then((res) => {
-            commit('SET_TOKEN', res.data)
-            return res.data
-        })
-    },
-    logout({ commit }) {
-        commit('CLEAR_USER')
-        commit('CLEAR_TOKEN')
-        commit('menu/CLEAR_MENU_GROUP', null, { root: true })
-        commit('menu/CLEAR_VIEW_ROUTES', null, { root: true })
-        commit('process/RESET_PROCESS', null, { root: true })
-    },
-    async queryUserInfo({ commit }) {
-        return getUserInfo().then((res) => {
-            commit('SET_USERINFO', res.data.userInfo)
-            return res.data.userInfo
-        })
-    },
-}
-
-export default {
+export const useUserStore = defineStore('userStore', {
     namespaced: true,
-    state: state,
-    actions: actions,
-    mutations: mutations,
-}
+    state: () => ({
+        token: getToken() || null,
+        userInfo: storage.get('userInfo') || {},
+    }),
+    actions: {
+        async login(form) {
+            return login(form).then((res) => {
+                this.SET_TOKEN(res.data);
+                return res.data;
+            })
+        },
+        logout() {
+            const menuStore = useMenuStore();
+            const processStore = useProcessStore();
+            this.CLEAR_USER();
+            this.CLEAR_TOKEN();
+            menuStore.CLEAR_MENU_GROUP();
+            menuStore.CLEAR_VIEW_ROUTES();
+            processStore.RESET_PROCESS();
+        },
+        async getUserInfo() {
+            return getUserInfo().then((res) => {
+                this.SET_USERINFO(res.data);
+                return res.data.userInfo
+            })
+        },
+        SET_TOKEN(token) {
+            setToken(token)
+            this.token = token
+        },
+        SET_USERINFO(userInfo) {
+            storage.set('userInfo', userInfo)
+            this.userInfo = userInfo
+        },
+        CLEAR_USER() {
+            this.userInfo = {}
+            storage.remove('userInfo')
+        },
+        CLEAR_TOKEN() {
+            this.token = null
+            removeToken()
+        }
+    },
+    getters: {
+
+    },
+});

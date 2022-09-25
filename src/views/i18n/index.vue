@@ -48,20 +48,23 @@
 import local from "./local";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useStore } from "vuex";
+import { useAppStore } from '@/store/modules/app.js';
+
+
 export default {
   name: "i18n",
   setup() {
     const { t, locale, getLocaleMessage, mergeLocaleMessage } = useI18n({
       useScope: "global",
     });
-    const store = useStore();
+    const appStore = useAppStore();
 
     const lang = computed({
-      get: () => store.getters.language,
+      get: () => appStore.language,
       set: (lang) => {
         locale.value = lang;
-        store.dispatch("app/setLanguage", lang);
+        //store.dispatch("app/setLanguage", lang);
+        appStore.setLanguage(lang);
       },
     });
 

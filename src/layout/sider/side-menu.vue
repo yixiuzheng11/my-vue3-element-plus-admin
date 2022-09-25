@@ -18,9 +18,9 @@
 <script>
 import _ from 'lodash';
 import {computed, onBeforeUnmount, onMounted, ref} from 'vue';
-import {useStore} from 'vuex';
 import {useRouter} from 'vue-router';
 import sideMenuItem from './side-menu-item';
+import { useMenuStore } from '@/store/modules/menu.js';
 
 export default {
   name: 'side-menu',
@@ -33,12 +33,12 @@ export default {
   },
   setup(props) {
     const {currentRoute} = useRouter();
-    const store = useStore();
+    const menuStore = useMenuStore();
     const isCollapse = ref(false);
 
     let routeList = computed(() => {
-      if (store.getters.menuGroup && store.getters.menuGroup.length > 0) {
-        return store.getters.menuGroup;
+      if (menuStore.menuGroup && menuStore.menuGroup.length > 0) {
+        return menuStore.menuGroup;
       }
       return [];
     });
@@ -46,9 +46,11 @@ export default {
     const handleResize = (e) => {
       let innerWidth = e.target.innerWidth;
       if (innerWidth < 780 && !props.collapse) {
-        store.commit('menu/COLLAPSE', true);
+        //store.commit('menu/COLLAPSE', true);
+        menuStore.COLLAPSE(true);
       } else if (innerWidth > 1200 && props.collapse) {
-        store.commit('menu/COLLAPSE', false);
+        //store.commit('menu/COLLAPSE', false);
+        menuStore.COLLAPSE(false);
       }
     };
 

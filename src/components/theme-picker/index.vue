@@ -17,23 +17,24 @@
 </template>
 
 <script>
-import { useStore } from 'vuex';
 import { computed, getCurrentInstance, reactive, toRefs, watch } from 'vue';
+import { useAppStore } from '@/store/modules/app.js';
+
 const version = require('element-plus/package.json').version; // element-ui version from node_modules
 const ORIGINAL_THEME = '#409EFF'; // default color
 
 export default {
   emits: ['change'],
   setup(_, context) {
-    const store = useStore();
+    const appStore = useAppStore();
     const ctx = getCurrentInstance();
     const state = reactive({
       chalk: '',
-      theme: store.state.settings.theme || ORIGINAL_THEME,
+      theme: appStore.theme || ORIGINAL_THEME,
     });
 
     const defaultTheme = computed(() => {
-      return store.state.settings.theme;
+      return appStore.theme;
     });
 
     watch(defaultTheme, (value) => {

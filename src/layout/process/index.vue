@@ -34,12 +34,12 @@
 
 <script>
 import {computed, reactive, ref, onMounted, toRefs} from 'vue';
-import {useStore} from 'vuex';
 import {useRouter} from 'vue-router';
+import { useProcessStore } from '@/store/modules/process.js';
 
 export default {
   setup() {
-    const store = useStore();
+    const processStore = useProcessStore();
     const router = useRouter();
 
     const container = ref(null);
@@ -56,7 +56,7 @@ export default {
     });
 
     const processList = computed(() => {
-      return store.getters.processList;
+      return processStore.list;
     });
 
     onMounted(() => {
@@ -87,7 +87,8 @@ export default {
     };
 
     const onDel = (index) => {
-      store.commit('process/DEL_PROCESS', index);
+      //store.commit('process/DEL_PROCESS', index);
+      processStore.DEL_PROCESS(index);
       toPath();
     };
 
@@ -107,20 +108,21 @@ export default {
           break;
 
         case 'other':
-          store.commit(
+          /*store.commit(
               'process/SET_PROCESS',
               processList.value.filter((e) => e.value == current.value || e.value == '/')
-          );
+          );*/
+          processStore.SET_PROCESS(processList.value.filter((e) => e.value == current.value || e.value == '/'));
           break;
 
         case 'all':
-          store.commit(
+          /*store.commit(
               'process/SET_PROCESS',
               processList.value.filter((e) => e.value == '/')
-          );
+          );*/
+          processStore.SET_PROCESS(processList.value.filter((e) => e.value == '/'));
           break;
       }
-
       toPath();
     };
 

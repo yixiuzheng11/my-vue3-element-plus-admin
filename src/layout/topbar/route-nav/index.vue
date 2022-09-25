@@ -10,19 +10,19 @@
 </template>
 
 <script>
-import {useStore} from "vuex";
 import {computed, ref, watch} from "vue";
 import {useRouter} from "vue-router";
+import { useMenuStore } from '@/store/modules/menu.js';
 
 export default {
   setup() {
-    const store = useStore();
+    const menuStore = useMenuStore();
     const {currentRoute} = useRouter();
 
     const list = ref([]);
 
     const menuGroup = computed(() => {
-      return store.getters.menuGroup;
+      return menuStore.menuGroup;
     });
 
     watch(

@@ -40,7 +40,7 @@ export default {
     let state = reactive({
       formModel: {
         username: "admin",
-        password: "94d087837c0370c14e6ded2ae027f120",
+        password: "123456",
       },
       loading: false,
       rules: {
@@ -71,6 +71,7 @@ export default {
             }
             state.loading = false;
           } catch (error) {
+            console.log(error);
             state.loading = false;
             ElMessage.error(error);
           }

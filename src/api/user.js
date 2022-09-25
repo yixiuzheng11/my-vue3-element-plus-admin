@@ -21,7 +21,7 @@ export function getUserInfo(){
 export function getPermMenu(){
     return request({
         method: "GET",
-        url: '/permmenu',
+        url: '/getPermMenu',
     });
 }
 

@@ -9,16 +9,16 @@
 <script>
 import {ElConfigProvider, ElNotification} from 'element-plus'
 import {defineComponent, reactive, toRefs} from "vue";
-import {useStore} from "vuex";
+import { useAppStore } from '@/store/modules/app.js';
 
 export default defineComponent({
   components: {
     ElConfigProvider,
   },
   setup() {
-    const store = useStore()
+    const appStore = useAppStore()
     const state = reactive({
-      locale: store.getters.language
+      locale: appStore.language
     });
 
     return {

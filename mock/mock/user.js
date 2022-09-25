@@ -30,7 +30,7 @@ export default {
             })
         }
     },
-    "GET /permmenu": async (req, res) => {
+    "GET /getPermMenu": async (req, res) => {
         if (!checkToken(req.headers)) {
             res.send({
                 "data": {},

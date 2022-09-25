@@ -25,19 +25,20 @@
 
 <script>
 import {computed} from 'vue';
-import {useStore} from 'vuex';
 import sider from './sider';
 import topbar from './topbar';
 import process from './process';
+import { useMenuStore } from '@/store/modules/menu.js';
+import { useProcessStore } from '@/store/modules/process.js';
 
 export default {
   name: 'Layout',
   components: {sider, topbar, process},
   setup() {
-    const store = useStore();
-
-    const collapse = computed(() => store.getters.menuCollapse);
-    const caches = computed(() => store.getters.processList.filter(e => e.keepAlive).map(e => e.name))
+    const menuStore = useMenuStore();
+    const processStore = useProcessStore();
+    const collapse = computed(() => menuStore.menuCollapse);
+    const caches = computed(() => processStore.list.filter(e => e.keepAlive).map(e => e.name))
 
     return {
       collapse,
